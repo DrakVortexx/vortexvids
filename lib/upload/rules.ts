@@ -2,7 +2,7 @@
 // Keep in step with public.create_upload() in supabase/migrations/005_videos.sql.
 // No imports on purpose, so Node can load this file directly.
 
-export const MAX_UPLOAD_BYTES = 2 * 1024 * 1024 * 1024; // 2 GB
+export const MAX_UPLOAD_BYTES = 50 * 1024 * 1024; // 50 MB
 export const UPLOADS_PER_DAY = 10;
 /** Every part is 16 MB except the last one. R2 wants at least 5 MB per part. */
 export const PART_SIZE = 16 * 1024 * 1024;
@@ -12,6 +12,10 @@ export const PARALLEL_PARTS = 3;
 export const PART_RETRIES = 3;
 /** How long the presigned part URLs work, in seconds. */
 export const PART_URL_TTL_S = 6 * 60 * 60;
+
+// Video duration limits
+export const MAX_SHORT_DURATION_S = 40; // 40 seconds for shorts
+export const MAX_LONG_DURATION_S = 5 * 60; // 5 minutes for regular videos
 
 export const TITLE_MAX = 100;
 export const DESCRIPTION_MAX = 5000;
@@ -168,7 +172,7 @@ export function uploadErrorText(code: string | null | undefined): string {
     case "file_empty":
       return "This file is empty.";
     case "file_too_big":
-      return "This file is bigger than 2 GB, the most one upload can be.";
+      return "This file is bigger than 50 MB, the most one upload can be.";
     case "bad_type":
       return "Only MP4, MOV, WebM and MKV videos can be uploaded.";
     case "daily_limit":

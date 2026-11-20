@@ -49,7 +49,7 @@ export function SignupForm({ next, yapin = false }: { next: string; yapin?: bool
       options: {
         // The database trigger reads these and refuses under 13 right away.
         data: { username: name, birthdate },
-        emailRedirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}`,
+        // No email confirmation - sign in immediately
       },
     });
     if (error) {
@@ -57,12 +57,7 @@ export function SignupForm({ next, yapin = false }: { next: string; yapin?: bool
       return setError(accountErrorText(error.message));
     }
 
-    if (!data.session) {
-      // Email confirmation is on: finish on /welcome after the link is opened.
-      setBusy(false);
-      return setSentTo(email.trim());
-    }
-
+    // Complete signup immediately (no email confirmation)
     const { error: rpcError } = await supabase.rpc("complete_signup", { username: name, birthdate });
     if (rpcError) {
       router.push(`/welcome?next=${encodeURIComponent(next)}`);

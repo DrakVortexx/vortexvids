@@ -8,7 +8,7 @@ import { TRENDING_GRAVITY } from "../feed/score.ts";
 import { formatTime } from "../watch/format.ts";
 
 /** A short is this long or less (the duration rounded down, as the player shows it). */
-export const SHORT_MAX_S = 60;
+export const SHORT_MAX_S = 40;
 
 /** A short counts a view (and as watched) after this many seconds: viewThreshold(d, true). */
 export const SHORT_VIEW_S = SHORT_VIEW_SECONDS;
@@ -46,7 +46,7 @@ export function isShort(shape: ShortShape, choice: boolean | null = null): boole
  */
 export function shortProblem(shape: ShortShape | null): string | null {
   if (!shape) {
-    return "This browser can't read the file's size and length. If it is vertical and 60 seconds or less, it becomes a Snip by itself after processing.";
+    return "This browser can't read the file's size and length. If it is vertical and 40 seconds or less, it becomes a Snip by itself after processing.";
   }
   const w = Number(shape.width);
   const h = Number(shape.height);
@@ -65,8 +65,8 @@ export function shortProblem(shape: ShortShape | null): string | null {
   if (!brief) {
     parts.push(
       Number.isFinite(d) && d > 0
-        ? `It's ${formatTime(d)} long. Snips are 60 seconds or less.`
-        : "Its length could not be read. Snips are 60 seconds or less.",
+        ? `It's ${formatTime(d)} long. Snips are 40 seconds or less.`
+        : "Its length could not be read. Snips are 40 seconds or less.",
     );
   }
   return parts.join(" ");
@@ -97,7 +97,7 @@ const MESSAGES: Record<string, string> = {
   not_signed_in: "Sign in first.",
   not_found: "This video isn't there anymore.",
   not_allowed: "Only the uploader can change that.",
-  not_a_short: "This video is not vertical and 60 seconds or less, so it can't be a Snip.",
+  not_a_short: "This video is not vertical and 40 seconds or less, so it can't be a Snip.",
   rate_limited: "You're doing that very fast. Try again in a bit.",
   not_set_up: "Snips aren't set up yet.",
   no_db: "Database not connected.",

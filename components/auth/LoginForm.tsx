@@ -33,9 +33,10 @@ export function LoginForm({ next, initialError, yapin = false }: { next: string;
 
   return (
     <>
-      <GoogleButton label="Sign in with Google" next={next} />
+      {/* Google OAuth disabled - use email auth */}
+      {/* <GoogleButton label="Sign in with Google" next={next} /> */}
       {yapin && <YapinButton next={next} />}
-      <OrDivider />
+      {yapin && <OrDivider />}
       <form onSubmit={submit} className="space-y-6" noValidate>
         <TextField
           label="Email"

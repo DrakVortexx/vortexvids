@@ -88,9 +88,10 @@ export function SignupForm({ next, yapin = false }: { next: string; yapin?: bool
 
   return (
     <>
-      <GoogleButton label="Sign up with Google" next={next} />
+      {/* Google OAuth disabled - use email auth */}
+      {/* <GoogleButton label="Sign up with Google" next={next} /> */}
       {yapin && <YapinButton next={next} />}
-      <OrDivider />
+      {yapin && <OrDivider />}
       <form onSubmit={submit} className="space-y-5" noValidate>
         <TextField
           label="Email"

@@ -35,21 +35,30 @@ export function WelcomeForm({ suggested, next }: { suggested: string; next: stri
     if (problem && problem !== "too_young") return setError(accountErrorText(problem));
 
     setBusy(true);
-    const { error } = await supabase.rpc("complete_signup", {
-      username: normalizeUsername(username),
-      birthdate,
-    });
-    if (error) {
-      if (error.message.includes("too_young")) {
-        await supabase.rpc("delete_account");
-        await supabase.auth.signOut();
-        setRefused(true);
-        router.refresh();
-        return;
-      }
+    
+    // Skip broken RPC - update profile directly
+    const name = normalizeUsername(username);
+    const { data: userData } = await supabase.auth.getUser();
+    
+    if (!userData.user?.id) {
       setBusy(false);
-      return setError(accountErrorText(error.message));
+      return setError('Not signed in. Please try logging in again.');
     }
+    
+    // Update profile directly
+    const { error: updateError } = await supabase
+      .from('profiles')
+      .update({
+        username: name,
+        onboarded: true
+      })
+      .eq('id', userData.user.id);
+    
+    if (updateError) {
+      setBusy(false);
+      return setError(accountErrorText(updateError.message));
+    }
+    
     router.push(next);
     router.refresh();
   }

@@ -64,17 +64,23 @@ export function SignupForm({ next, yapin = false }: { next: string; yapin?: bool
     // Wait a moment for trigger to complete
     await new Promise(resolve => setTimeout(resolve, 1000));
 
-    // Complete signup immediately (no email confirmation)
-    const { error: rpcError } = await supabase.rpc("complete_signup", { username: name, birthdate });
+    // Complete signup - parameters in correct order: username, birthdate
+    const { error: rpcError } = await supabase.rpc("complete_signup", { 
+      username: name, 
+      birthdate: birthdate 
+    });
     
     console.log('Complete signup result:', { error: rpcError });
     
     if (rpcError) {
       console.error('Complete signup error:', rpcError);
-      router.push(`/welcome?next=${encodeURIComponent(next)}`);
-    } else {
-      router.push(next);
+      // Still try to continue - profile might have been created by trigger
+      setBusy(false);
+      return setError(accountErrorText(rpcError.message));
     }
+    
+    // Success - redirect
+    router.push(next);
     router.refresh();
   }
 

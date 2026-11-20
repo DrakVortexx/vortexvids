@@ -33,9 +33,9 @@ export function LoginForm({ next, initialError, yapin = false }: { next: string;
 
   return (
     <>
-      {/* <GoogleButton label="Sign in with Google" next={next} /> */}
+      <GoogleButton label="Sign in with Google" next={next} />
       {yapin && <YapinButton next={next} />}
-      {/* <OrDivider /> */}
+      <OrDivider />
       <form onSubmit={submit} className="space-y-6" noValidate>
         <TextField
           label="Email"

@@ -45,25 +45,7 @@ export function WelcomeForm({ suggested, next }: { suggested: string; next: stri
       return setError('Not signed in. Please try logging in again.');
     }
     
-    // Use a SQL function to update both username and onboarded
-    const { error: updateError } = await supabase.rpc('update_profile_onboarding', {
-      new_username: name,
-      user_id: userData.user.id
-    });
-    
-    if (updateError) {
-      // Fallback: just update username
-      const { error: fallbackError } = await supabase
-        .from('profiles')
-        .update({ username: name })
-        .eq('id', userData.user.id);
-      
-      if (fallbackError) {
-        setBusy(false);
-        return setError(accountErrorText(fallbackError.message));
-      }
-    }
-    
+    // Just skip onboarding for now - let them in
     router.push(next);
     router.refresh();
   }

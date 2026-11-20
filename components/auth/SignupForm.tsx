@@ -62,42 +62,34 @@ export function SignupForm({ next, yapin = false }: { next: string; yapin?: bool
     console.log('Signup result:', { data, hasSession: !!data.session, hasUser: !!data.user });
 
     // Wait a moment for trigger to complete
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise(resolve => setTimeout(resolve, 1500));
 
-    // Complete signup - check if profile was created by trigger
-    const { data: signupData, error: rpcError } = await supabase.rpc("complete_signup", [name, birthdate]);
-    
-    console.log('Complete signup result:', { error: rpcError, data: signupData });
-    
-    // If complete_signup fails, check if profile exists anyway
-    if (rpcError) {
-      console.error('Complete signup error:', rpcError);
-      
-      // Check if profile was created by trigger
-      const { data: profile } = await supabase
+    // Skip the broken complete_signup RPC - update profile directly
+    if (data.user?.id) {
+      // Update the profile that was created by trigger
+      const { error: updateError } = await supabase
         .from('profiles')
-        .select('id, username, onboarded')
-        .eq('id', data.user?.id)
-        .single();
+        .update({
+          username: name,
+          onboarded: true
+        })
+        .eq('id', data.user.id);
       
-      console.log('Profile check:', profile);
-      
-      if (profile) {
-        // Profile exists, redirect anyway
+      if (updateError) {
+        console.error('Profile update error:', updateError);
         setBusy(false);
-        router.push(next);
-        router.refresh();
-        return;
+        return setError('Profile setup failed. Please try logging in.');
       }
+
+      console.log('Profile updated successfully');
       
-      // No profile at all - show error
+      // Success - redirect
+      router.push(next);
+      router.refresh();
+    } else {
       setBusy(false);
-      return setError('Account created but profile setup failed. Please try logging in.');
+      return setError('Signup failed. Please try again.');
     }
-    
-    // Success - redirect
-    router.push(next);
-    router.refresh();
   }
 
   if (sentTo) {

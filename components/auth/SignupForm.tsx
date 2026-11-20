@@ -52,14 +52,25 @@ export function SignupForm({ next, yapin = false }: { next: string; yapin?: bool
         // No email confirmation - sign in immediately
       },
     });
+    
     if (error) {
       setBusy(false);
       return setError(accountErrorText(error.message));
     }
 
+    // Debug: Check if user was created
+    console.log('Signup result:', { data, hasSession: !!data.session, hasUser: !!data.user });
+
+    // Wait a moment for trigger to complete
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
     // Complete signup immediately (no email confirmation)
     const { error: rpcError } = await supabase.rpc("complete_signup", { username: name, birthdate });
+    
+    console.log('Complete signup result:', { error: rpcError });
+    
     if (rpcError) {
+      console.error('Complete signup error:', rpcError);
       router.push(`/welcome?next=${encodeURIComponent(next)}`);
     } else {
       router.push(next);

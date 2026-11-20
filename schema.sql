@@ -1,9 +1,3 @@
-
-> vortexvids@0.1.0 db:migrations
-> node scripts/db-migrations.mjs
-
--- sloptube: every migration in supabase/migrations, in order (21 files).
-
 -- ===== 000_init.sql =====
 -- 000_init.sql
 -- First migration. Creates a small key/value table the app can use for

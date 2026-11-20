@@ -6,13 +6,20 @@ import { createUploadDb } from "./db";
 import { readR2Config } from "./env";
 import type { HandlerResult, UploadContext } from "./handlers";
 import { createR2Client, createR2Storage } from "./r2";
+import { createSupabaseStorage } from "./supabase-storage";
 
-/** The real R2 storage, Supabase and session for the upload routes. */
+/** The real storage (R2 or Supabase), database and session for the upload routes. */
 export async function uploadContext(): Promise<UploadContext> {
   const r2 = readR2Config();
   const supabase = await createClient();
+  
+  // Use R2 if configured, otherwise fall back to Supabase Storage
+  const storage = r2 
+    ? createR2Storage(createR2Client(r2), r2.bucket)
+    : (supabase ? createSupabaseStorage(supabase, "videos") : null);
+  
   return {
-    storage: r2 ? createR2Storage(createR2Client(r2), r2.bucket) : null,
+    storage,
     db: supabase ? createUploadDb(supabase) : null,
     userId: async () => (await getCurrentUser())?.id ?? null,
     flagOn: (userId) => flagOn("upload", userId),

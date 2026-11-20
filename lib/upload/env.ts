@@ -21,3 +21,14 @@ export function readR2Config(): R2Config | null {
   if (!accountId || !accessKeyId || !secretAccessKey || !bucket) return null;
   return { accountId, accessKeyId, secretAccessKey, bucket };
 }
+
+/**
+ * Check if we have storage configured (either R2 or Supabase)
+ */
+export function hasStorageConfigured(): boolean {
+  // R2 is configured
+  if (readR2Config() !== null) return true;
+  
+  // Fall back to Supabase Storage (always available if Supabase is configured)
+  return true;
+}

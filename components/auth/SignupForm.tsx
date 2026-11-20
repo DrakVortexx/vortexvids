@@ -64,11 +64,8 @@ export function SignupForm({ next, yapin = false }: { next: string; yapin?: bool
     // Wait a moment for trigger to complete
     await new Promise(resolve => setTimeout(resolve, 1000));
 
-    // Complete signup - parameters in correct order: username, birthdate
-    const { error: rpcError } = await supabase.rpc("complete_signup", { 
-      username: name, 
-      birthdate: birthdate 
-    });
+    // Complete signup - use positional array instead of named object
+    const { error: rpcError } = await supabase.rpc("complete_signup", [name, birthdate]);
     
     console.log('Complete signup result:', { error: rpcError });
     

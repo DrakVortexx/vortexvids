@@ -64,16 +64,35 @@ export function SignupForm({ next, yapin = false }: { next: string; yapin?: bool
     // Wait a moment for trigger to complete
     await new Promise(resolve => setTimeout(resolve, 1000));
 
-    // Complete signup - use positional array instead of named object
-    const { error: rpcError } = await supabase.rpc("complete_signup", [name, birthdate]);
+    // Complete signup - check if profile was created by trigger
+    const { data: signupData, error: rpcError } = await supabase.rpc("complete_signup", [name, birthdate]);
     
-    console.log('Complete signup result:', { error: rpcError });
+    console.log('Complete signup result:', { error: rpcError, data: signupData });
     
+    // If complete_signup fails, check if profile exists anyway
     if (rpcError) {
       console.error('Complete signup error:', rpcError);
-      // Still try to continue - profile might have been created by trigger
+      
+      // Check if profile was created by trigger
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('id, username, onboarded')
+        .eq('id', data.user?.id)
+        .single();
+      
+      console.log('Profile check:', profile);
+      
+      if (profile) {
+        // Profile exists, redirect anyway
+        setBusy(false);
+        router.push(next);
+        router.refresh();
+        return;
+      }
+      
+      // No profile at all - show error
       setBusy(false);
-      return setError(accountErrorText(rpcError.message));
+      return setError('Account created but profile setup failed. Please try logging in.');
     }
     
     // Success - redirect

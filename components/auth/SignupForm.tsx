@@ -67,11 +67,11 @@ export function SignupForm({ next, yapin = false }: { next: string; yapin?: bool
     // Skip the broken complete_signup RPC - update profile directly
     if (data.user?.id) {
       // Update the profile that was created by trigger
+      // Note: onboarded is not writable via API, so we only update username
       const { error: updateError } = await supabase
         .from('profiles')
         .update({
-          username: name,
-          onboarded: true
+          username: name
         })
         .eq('id', data.user.id);
       
@@ -83,8 +83,8 @@ export function SignupForm({ next, yapin = false }: { next: string; yapin?: bool
 
       console.log('Profile updated successfully');
       
-      // Success - redirect
-      router.push(next);
+      // Success - redirect (welcome page will handle onboarding)
+      router.push('/welcome?next=' + encodeURIComponent(next));
       router.refresh();
     } else {
       setBusy(false);

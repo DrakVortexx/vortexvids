@@ -50,19 +50,27 @@ export async function ResultsView({ searchParams }: { searchParams: PageProps<"/
     case "no-db":
       return (
         <div data-search-state={state.kind}>
-          <EmptyState title="Search isn't on yet." hint="Search arrives once there are videos to find." cards={4} />
+          <EmptyState
+            title="Search isn't on yet."
+            hint="Search arrives once there are videos to find."
+            action={{ href: "/", label: "Browse videos" }}
+          />
         </div>
       );
     case "not-set-up":
       return (
         <div data-search-state="not-set-up">
-          <EmptyState title="Search isn't set up yet." hint="Run supabase/migrations/010_search.sql in the Supabase SQL editor." cards={0} />
+          <EmptyState
+            title="Search isn't set up yet."
+            hint="The site owner still needs to finish the database setup."
+            action={{ href: "/", label: "Browse videos" }}
+          />
         </div>
       );
     case "empty-query":
       return (
         <div className={frame} data-search-state="empty-query">
-          <Message state="empty-query" title="Search sloptube" hint="Type what you are looking for in the box at the top." />
+          <Message state="empty-query" title="Search vortexvids" hint="Type what you are looking for in the box at the top." />
         </div>
       );
     case "rate-limited":

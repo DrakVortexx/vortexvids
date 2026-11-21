@@ -169,37 +169,39 @@ function SearchForm({
         return (
           <li
             key={`${item.kind}:${item.text}`}
-            id={`${id}-opt-${i}`}
-            role="option"
-            aria-selected={i === active}
-            data-search-option={item.kind}
-            data-active={i === active || undefined}
+            role="presentation"
             onMouseEnter={() => setActive(i)}
-            onClick={() => go(item.text)}
-            className={`flex cursor-default items-center gap-3 pl-4 pr-2 text-[16px] leading-8 ${
+            className={`flex items-center gap-3 pl-4 pr-2 text-[16px] leading-8 ${
               variant === "overlay" ? "h-12" : "h-8"
             } ${i === active ? "bg-[var(--active)]" : ""} ${item.kind === "recent" ? "text-[var(--recent)]" : "text-text"}`}
           >
-            <Icon className="h-5 w-5 shrink-0 text-text-3" />
-            <span className="min-w-0 flex-1 truncate">
-              {parts ? (
-                <>
-                  {parts.typed}
-                  <b className="font-medium">{parts.rest}</b>
-                </>
-              ) : (
-                item.text
-              )}
-            </span>
+            <div
+              id={`${id}-opt-${i}`}
+              role="option"
+              aria-selected={i === active}
+              data-search-option={item.kind}
+              data-active={i === active || undefined}
+              onClick={() => go(item.text)}
+              className="flex min-w-0 flex-1 cursor-default items-center gap-3"
+            >
+              <Icon className="h-5 w-5 shrink-0 text-text-3" />
+              <span className="min-w-0 flex-1 truncate">
+                {parts ? (
+                  <>
+                    {parts.typed}
+                    <b className="font-medium">{parts.rest}</b>
+                  </>
+                ) : (
+                  item.text
+                )}
+              </span>
+            </div>
             {item.kind === "recent" && (
               <button
                 type="button"
                 aria-label={`Remove ${item.text} from recent searches`}
                 data-search-remove
-                onClick={(e) => {
-                  e.stopPropagation();
-                  forget(item.text);
-                }}
+                onClick={() => forget(item.text)}
                 className="grid h-8 w-8 shrink-0 place-items-center rounded-full text-text-3 hover:text-text"
               >
                 <CloseIcon className="h-4 w-4" />
@@ -286,7 +288,7 @@ export function SearchBox({ initialQuery = "" }: { initialQuery?: string }) {
           type="button"
           aria-label="Search with your voice"
           disabled
-          title="Voice search is not part of sloptube yet"
+          title="Voice search is not available yet"
           className="ml-2 grid h-10 w-10 shrink-0 place-items-center rounded-full text-icon"
         >
           <MicIcon className="h-6 w-6" />

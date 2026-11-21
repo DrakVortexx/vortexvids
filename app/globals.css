@@ -12,12 +12,12 @@
   --surface: #ffffff;
   --text: #1e0a2e;
   --text-2: #6b4a8c;
-  /* Tertiary text. #717171 and #8a8a8a pass 4.5:1 on the page and the surface (feature 15). */
-  --text-3: #8b7aa0;
+  /* Tertiary text: at least 4.5:1 on the page, the surface and the hover color. */
+  --text-3: #705686;
   --link: #7c3aed;
   --red: #cc0000;
   /* The brand purple (lib/brand.ts): the mark, active guide icons and thumbnail progress. */
-  --mark: #8b5cf6;
+  --mark: #7c3aed;
   /* "vortex" in the wordmark; "vids" uses the text color. */
   --logo-word: #6d28d9;
   --divider: #e9d5ff;
@@ -183,7 +183,7 @@
     height: 36px;
     padding: 0 16px;
     border-radius: 2px;
-    background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+    background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
     color: #ffffff;
     font-size: 14px;
     font-weight: 500;
@@ -365,6 +365,18 @@
 
 .field:focus-visible {
   outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--focus) 30%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 /* "Skip to content": off screen until it is focused, then top left over the top bar. */

@@ -6,7 +6,6 @@ import { useState, type FormEvent } from "react";
 import { accountErrorText } from "@/lib/accounts/validation";
 import { createClient } from "@/lib/supabase/client";
 import { FormError, OrDivider, TextField } from "./fields";
-import { GoogleButton } from "./GoogleButton";
 import { YapinButton } from "./YapinButton";
 
 export function LoginForm({ next, initialError, yapin = false }: { next: string; initialError?: string | null; yapin?: boolean }) {
@@ -33,8 +32,6 @@ export function LoginForm({ next, initialError, yapin = false }: { next: string;
 
   return (
     <>
-      {/* Google OAuth disabled - use email auth */}
-      {/* <GoogleButton label="Sign in with Google" next={next} /> */}
       {yapin && <YapinButton next={next} />}
       {yapin && <OrDivider />}
       <form onSubmit={submit} className="space-y-6" noValidate>

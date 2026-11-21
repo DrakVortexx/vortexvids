@@ -19,7 +19,7 @@ async function LoginGate({ searchParams }: { searchParams: PageProps<"/login">["
   const state = await accountsState();
   if (state.kind === "no-db") return <DbNotConnected />;
   if (state.kind === "off") return <FeatureOff />;
-  if (state.user) redirect(state.user.onboarded ? next : "/welcome");
+  if (state.user) redirect(next);
   const yapin = (await yapinSignIn(null)) !== null;
   const note = typeof params.yapin === "string" ? yapinNote(params.yapin) : null;
   return (

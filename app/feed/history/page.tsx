@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { HistorySkeleton, HistoryView } from "@/components/history/HistoryView";
 
-export const metadata = { title: "History | vortexvids" };
+export const metadata = { title: "History | vortexvids", robots: { index: false } };
 
 // /feed/history, the 2019 address (/history sends you here).
 export default function HistoryPage() {

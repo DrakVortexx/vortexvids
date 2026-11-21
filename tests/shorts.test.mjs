@@ -24,13 +24,13 @@ const id = (n) => `f0000000-0000-4000-8000-${String(n).padStart(12, "0")}`;
 
 // Classification ------------------------------------------------------------------------
 
-test("isShort: vertical and 60 seconds or less, like video_is_short()", () => {
+test("isShort: vertical and 40 seconds or less, like video_is_short()", () => {
   assert.equal(isShort({ durationS: 30, width: 1080, height: 1920 }), true);
-  assert.equal(isShort({ durationS: 60, width: 720, height: 1280 }), true);
-  // The duration rounded down, as the player shows it: 60.9 is 1:00.
-  assert.equal(isShort({ durationS: 60.9, width: 720, height: 1280 }), true);
-  assert.equal(isShort({ durationS: 61, width: 720, height: 1280 }), false);
-  assert.equal(SHORT_MAX_S, 60);
+  assert.equal(isShort({ durationS: 40, width: 720, height: 1280 }), true);
+  // The duration rounded down, as the player shows it: 40.9 is 0:40.
+  assert.equal(isShort({ durationS: 40.9, width: 720, height: 1280 }), true);
+  assert.equal(isShort({ durationS: 41, width: 720, height: 1280 }), false);
+  assert.equal(SHORT_MAX_S, 40);
   // Horizontal and square are never shorts.
   assert.equal(isShort({ durationS: 20, width: 1920, height: 1080 }), false);
   assert.equal(isShort({ durationS: 20, width: 1080, height: 1080 }), false);
@@ -50,10 +50,10 @@ test("isShort: the uploader's choice can only say no", () => {
 });
 
 test("shortProblem: says why a file cannot be a short", () => {
-  assert.equal(shortProblem({ durationS: 42, width: 1080, height: 1920 }), null);
-  assert.match(shortProblem({ durationS: 42, width: 1920, height: 1080 }), /horizontal \(1920 x 1080\)/);
-  assert.match(shortProblem({ durationS: 42, width: 1080, height: 1080 }), /square \(1080 x 1080\)/);
-  assert.match(shortProblem({ durationS: 134, width: 1080, height: 1920 }), /It's 2:14 long\. Snips are 60 seconds or less\./);
+  assert.equal(shortProblem({ durationS: 40, width: 1080, height: 1920 }), null);
+  assert.match(shortProblem({ durationS: 40, width: 1920, height: 1080 }), /horizontal \(1920 x 1080\)/);
+  assert.match(shortProblem({ durationS: 40, width: 1080, height: 1080 }), /square \(1080 x 1080\)/);
+  assert.match(shortProblem({ durationS: 134, width: 1080, height: 1920 }), /It's 2:14 long\. Snips are 40 seconds or less\./);
   const both = shortProblem({ durationS: 600, width: 1920, height: 1080 });
   assert.match(both, /horizontal/);
   assert.match(both, /10:00 long/);

@@ -8,7 +8,11 @@ import { ShortsFeed } from "./ShortsFeed";
 export function ShortsComingSoon({ state }: { state: string }) {
   return (
     <div data-shorts-state={state}>
-      <EmptyState title="No Snips yet." hint="Check back soon." />
+      <EmptyState
+        title="No Snips yet."
+        hint="Short vertical videos will show up here when they are ready."
+        action={{ href: "/", label: "Browse videos" }}
+      />
     </div>
   );
 }
@@ -36,7 +40,11 @@ export async function ShortsView({ startId = null }: { startId?: string | null }
     case "not-set-up":
       return (
         <div data-shorts-state="not-set-up">
-          <EmptyState title="Snips aren't set up yet." hint="Run supabase/migrations/013_shorts.sql in the Supabase SQL editor." />
+          <EmptyState
+            title="Snips aren't set up yet."
+            hint="The site owner still needs to finish the database setup."
+            action={{ href: "/", label: "Browse videos" }}
+          />
         </div>
       );
     case "not-a-short":

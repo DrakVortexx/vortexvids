@@ -15,7 +15,7 @@ import { startSite } from "./launch-mock.mjs";
 
 const port = Number(process.env.APP_PORT ?? 3470);
 const site = await startSite({ port });
-console.log(`\nsloptube demo running at ${site.base}`);
+console.log(`\nvortexvids demo running at ${site.base}`);
 console.log("Made up channels and videos, served by a local stand in for Supabase. Ctrl+C to stop.\n");
 
 const stop = () => {

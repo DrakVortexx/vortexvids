@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Smoke test for a running sloptube.
+// Smoke test for a running vortexvids.
 // It starts nothing itself. Point it at a server that is already up:
 //   node scripts/smoke.mjs http://localhost:3123
 
@@ -15,7 +15,7 @@ const checks = [
     // grid shows, inside data-feed-state="off" or "no-db". Never a crash.
     path: "/",
     test: (body) =>
-      (body.includes("sloptube") && /data-feed-state="(off|no-db|not-set-up|empty|ready)"/.test(body)) ||
+      (body.includes("vortexvids") && /data-feed-state="(off|no-db|not-set-up|empty|ready)"/.test(body)) ||
       "home page shows none of the feed states",
   },
   {

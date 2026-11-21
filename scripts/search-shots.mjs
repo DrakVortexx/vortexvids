@@ -324,7 +324,7 @@ try {
     check(true, `enter goes to /results?search_query=${first}`);
     await page.waitForSelector('[data-search-state="ready"]', { timeout: 30000 });
     check((await barInput(page).inputValue()) === first, "the results page keeps the query in the box");
-    check((await page.title()) === `${first} | sloptube`, `page title echoes the query ("${await page.title()}")`);
+    check((await page.title()) === `${first} | vortexvids`, `page title echoes the query ("${await page.title()}")`);
 
     // Recent searches: the empty box shows them, the X removes one.
     await barInput(page).fill("");

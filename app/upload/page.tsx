@@ -15,8 +15,6 @@ async function UploadGate() {
       return <UploadsOff noDb={state.noDb} />;
     case "signed-out":
       redirect("/login?next=/upload");
-    case "not-onboarded":
-      redirect("/welcome?next=/upload");
     case "ready":
       return <Uploader configured={state.configured} />;
   }

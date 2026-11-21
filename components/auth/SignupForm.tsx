@@ -12,7 +12,6 @@ import {
 import { createClient } from "@/lib/supabase/client";
 import { BirthdayFields, birthdayValue, emptyBirthday } from "./BirthdayFields";
 import { FieldNote, FormError, OrDivider, TextField } from "./fields";
-import { GoogleButton } from "./GoogleButton";
 import { YapinButton } from "./YapinButton";
 import { useUsernameCheck, usernameNote } from "./useUsernameCheck";
 
@@ -24,7 +23,6 @@ export function SignupForm({ next, yapin = false }: { next: string; yapin?: bool
   const [birthday, setBirthday] = useState(emptyBirthday);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [sentTo, setSentTo] = useState<string | null>(null);
   const status = useUsernameCheck(username);
 
   const birthdate = birthdayValue(birthday);
@@ -46,70 +44,37 @@ export function SignupForm({ next, yapin = false }: { next: string; yapin?: bool
     const { data, error } = await supabase.auth.signUp({
       email: email.trim(),
       password,
-      options: {
-        // The database trigger reads these and refuses under 13 right away.
-        data: { username: name, birthdate },
-        // No email confirmation - sign in immediately
-      },
+      options: { data: { username: name, birthdate } },
     });
-    
+
     if (error) {
       setBusy(false);
       return setError(accountErrorText(error.message));
     }
 
-    // Debug: Check if user was created
-    console.log('Signup result:', { data, hasSession: !!data.session, hasUser: !!data.user });
-
-    // Wait a moment for trigger to complete
-    await new Promise(resolve => setTimeout(resolve, 1500));
-
-    // Skip the broken complete_signup RPC - update profile directly
-    if (data.user?.id) {
-      // Update the profile that was created by trigger
-      // Note: onboarded is not writable via API, so we only update username
-      const { error: updateError } = await supabase
-        .from('profiles')
-        .update({
-          username: name
-        })
-        .eq('id', data.user.id);
-      
-      if (updateError) {
-        console.error('Profile update error:', updateError);
-        setBusy(false);
-        return setError('Profile setup failed. Please try logging in.');
-      }
-
-      console.log('Profile updated successfully');
-      
-      // Success - redirect (welcome page will handle onboarding)
-      router.push('/welcome?next=' + encodeURIComponent(next));
-      router.refresh();
-    } else {
+    if (!data.user?.id) {
       setBusy(false);
-      return setError('Signup failed. Please try again.');
+      return setError("Sign up failed. Please try again.");
     }
-  }
 
-  if (sentTo) {
-    return (
-      <div className="space-y-4 text-[14px] leading-5 text-text">
-        <p>
-          We sent a link to <strong>{sentTo}</strong>. Open it on this device to finish creating
-          your account.
-        </p>
-        <p className="text-text-2">No email after a few minutes? Check your spam folder.</p>
-      </div>
-    );
+    const { error: updateError } = await supabase
+      .from("profiles")
+      .update({ username: name })
+      .eq("id", data.user.id);
+
+    if (updateError) {
+      setBusy(false);
+      return setError("Profile setup failed. Please try signing in.");
+    }
+
+    router.push(next);
+    router.refresh();
   }
 
   const note = usernameNote(status);
 
   return (
     <>
-      {/* Google OAuth disabled - use email auth */}
-      {/* <GoogleButton label="Sign up with Google" next={next} /> */}
       {yapin && <YapinButton next={next} />}
       {yapin && <OrDivider />}
       <form onSubmit={submit} className="space-y-5" noValidate>

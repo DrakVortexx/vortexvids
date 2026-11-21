@@ -5,7 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 /**
  * Where Supabase sends people back after Google sign in or after they open
  * the confirmation email. Swaps the one time code for a session cookie, then
- * goes to /welcome until sign up is complete, or to ?next= after that.
+ * goes to ?next=.
  */
 export async function GET(request: NextRequest) {
   const params = request.nextUrl.searchParams;
@@ -20,14 +20,7 @@ export async function GET(request: NextRequest) {
   const { data, error } = await supabase.auth.exchangeCodeForSession(code);
   if (error || !data.user) return fail;
 
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("onboarded")
-    .eq("id", data.user.id)
-    .maybeSingle();
-
-  const target = profile?.onboarded ? next : `/welcome?next=${encodeURIComponent(next)}`;
-  return NextResponse.redirect(new URL(target, origin));
+  return NextResponse.redirect(new URL(next, origin));
 }
 
 /** The address people used, also behind a reverse proxy such as Caddy. */

@@ -55,13 +55,13 @@ function GuideLink({ item, onClick }: { item: Item; onClick?: () => void }) {
       href={item.href}
       onClick={onClick}
       aria-current={active ? "page" : undefined}
-      className={`flex h-10 items-center px-6 text-[14px] transition-all ${
-        active 
-          ? "bg-gradient-to-r from-[var(--mark)]/20 to-transparent font-medium border-l-4 border-[var(--mark)]" 
-          : "hover:bg-hover hover:border-l-4 hover:border-[var(--mark)]/40"
+      className={`flex h-10 items-center border-l-4 px-6 text-[14px] transition-colors ${
+        active
+          ? "border-[var(--mark)] bg-gradient-to-r from-[var(--mark)]/15 to-transparent font-medium"
+          : "border-transparent hover:bg-hover hover:border-[var(--mark)]/40"
       }`}
     >
-      <item.Icon className={`mr-6 h-6 w-6 shrink-0 transition-all ${active ? "text-[var(--mark)] drop-shadow-[0_0_4px_rgba(139,92,246,0.4)]" : "text-icon"}`} />
+      <item.Icon className={`mr-6 h-6 w-6 shrink-0 ${active ? "text-[var(--mark)]" : "text-icon"}`} />
       <span className="truncate">{item.label}</span>
     </Link>
   );
@@ -137,7 +137,9 @@ function MiniGuide() {
             key={href}
             href={href}
             aria-current={active ? "page" : undefined}
-            className="flex flex-col items-center pb-[14px] pt-4 hover:bg-hover"
+            className={`flex flex-col items-center border-b-2 pb-[12px] pt-4 hover:bg-hover ${
+              active ? "border-[var(--mark)] bg-hover" : "border-transparent"
+            }`}
           >
             <Icon className={`h-6 w-6 ${active ? "text-[var(--mark)]" : "text-icon"}`} />
             <span className="mt-1.5 max-w-full truncate px-1 text-[10px] leading-[14px] text-text">

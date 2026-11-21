@@ -74,6 +74,6 @@ export function urlsetXml(urls: SitemapUrl[]): string {
  */
 export function robotsTxt(origin: string, { maintenance = false }: { maintenance?: boolean } = {}): string {
   if (maintenance) return "User-agent: *\nDisallow: /\n";
-  const disallow = ["/api/", "/studio", "/admin", "/settings", "/upload", "/login", "/signup", "/welcome", "/auth/", "/flags", "/feed/history", "/feed/subscriptions", "/results"];
+  const disallow = ["/api/", "/studio", "/admin", "/settings", "/upload", "/login", "/signup", "/auth/", "/flags", "/feed/history", "/feed/subscriptions", "/results"];
   return ["User-agent: *", "Allow: /", ...disallow.map((d) => `Disallow: ${d}`), "", `Sitemap: ${origin}/sitemap.xml`, ""].join("\n");
 }

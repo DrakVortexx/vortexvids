@@ -5,7 +5,10 @@ import { readQuery } from "@/lib/search/query";
 // /results?search_query=<q>, the 2019 address. The query is in the title.
 export async function generateMetadata({ searchParams }: PageProps<"/results">) {
   const q = readQuery(await searchParams);
-  return { title: q ? `${q} | vortexvids` : "Search | vortexvids" };
+  return {
+    title: q ? `${q} | vortexvids` : "Search | vortexvids",
+    robots: { index: false, follow: false },
+  };
 }
 
 export default function ResultsPage({ searchParams }: PageProps<"/results">) {

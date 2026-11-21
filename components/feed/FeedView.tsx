@@ -44,7 +44,12 @@ export async function FeedView({
     case "no-db":
       return (
         <div data-feed-state={state.kind}>
-          <EmptyState {...placeholder} />
+          <EmptyState
+            {...placeholder}
+            title={placeholder.title ?? "Nothing to watch yet"}
+            hint={placeholder.hint ?? "Videos will appear here when this site is set up."}
+            action={{ href: "/trending", label: "Browse trending" }}
+          />
         </div>
       );
     case "not-set-up":
@@ -52,7 +57,8 @@ export async function FeedView({
         <div data-feed-state="not-set-up">
           <EmptyState
             title="The home feed isn't set up yet."
-            hint="Run supabase/migrations/008_feed.sql in the Supabase SQL editor."
+            hint="The site owner still needs to finish the database setup."
+            action={{ href: "/trending", label: "Browse trending" }}
           />
         </div>
       );
@@ -62,7 +68,11 @@ export async function FeedView({
       if (state.page.cards.length === 0 && shelf.length === 0) {
         return (
           <div data-feed-state="empty">
-            <EmptyState title="Nothing here yet" hint="Public videos show up here once they are processed." cards={4} />
+            <EmptyState
+              title="Nothing here yet"
+              hint="Public videos show up here once they are processed."
+              action={{ href: "/trending", label: "Browse trending" }}
+            />
           </div>
         );
       }

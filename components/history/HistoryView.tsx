@@ -31,7 +31,11 @@ export async function HistoryView() {
     case "no-db":
       return (
         <div data-history-state={state.kind}>
-          <EmptyState title="No watch history yet." hint="Watch history isn't switched on yet." cards={0} />
+          <EmptyState
+            title="No watch history yet."
+            hint="Watch history isn't switched on yet."
+            action={{ href: "/", label: "Browse videos" }}
+          />
         </div>
       );
     case "not-set-up":
@@ -39,8 +43,7 @@ export async function HistoryView() {
         <div data-history-state="not-set-up">
           <EmptyState
             title="Watch history isn't set up yet."
-            hint="Run supabase/migrations/011_engagement.sql in the Supabase SQL editor."
-            cards={0}
+            hint="The site owner still needs to finish the database setup."
           />
         </div>
       );

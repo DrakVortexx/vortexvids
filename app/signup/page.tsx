@@ -13,7 +13,7 @@ async function SignupGate({ searchParams }: { searchParams: PageProps<"/signup">
   const state = await accountsState();
   if (state.kind === "no-db") return <DbNotConnected />;
   if (state.kind === "off") return <FeatureOff />;
-  if (state.user) redirect(state.user.onboarded ? next : "/welcome");
+  if (state.user) redirect(next);
   const yapin = (await yapinSignIn(null)) !== null;
   return <SignupForm next={next} yapin={yapin} />;
 }

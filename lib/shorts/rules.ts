@@ -28,7 +28,7 @@ export const CHANNEL_SHORTS_PAGE = 24;
 export type ShortShape = { durationS: number | null | undefined; width: number | null | undefined; height: number | null | undefined };
 
 /**
- * Vertical (taller than wide) and 60 seconds or less, unless the uploader
+ * Vertical (taller than wide) and 40 seconds or less, unless the uploader
  * said no (`choice` false). Same as video_is_short() in SQL.
  */
 export function isShort(shape: ShortShape, choice: boolean | null = null): boolean {

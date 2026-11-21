@@ -17,7 +17,6 @@ export type UploadPageState =
   /** The flag is off for this person (also when the database is not connected in production). */
   | { kind: "off"; noDb: boolean }
   | { kind: "signed-out" }
-  | { kind: "not-onboarded" }
   | { kind: "ready"; user: CurrentUser; configured: boolean };
 
 /** What /upload should show. Reads the request, so call it inside <Suspense>. */
@@ -29,7 +28,6 @@ export async function uploadPageState(): Promise<UploadPageState> {
   const user = await getCurrentUser();
   if (!(await flagOn("upload", user?.id ?? null))) return { kind: "off", noDb: false };
   if (!user) return { kind: "signed-out" };
-  if (!user.onboarded) return { kind: "not-onboarded" };
   // Storage is configured if either R2 or Supabase is available
   const configured = readR2Config() !== null || readSupabaseConfig() !== null;
   return { kind: "ready", user, configured };

@@ -129,7 +129,7 @@ function DropZone({ disabled }: { disabled: boolean }) {
         </p>
       )}
       <p className="mt-auto pt-10 text-[12px] leading-4 text-text-3">
-        MP4, MOV, WebM or MKV, up to 50 MB each. Up to {UPLOADS_PER_DAY} uploads a day.
+        MP4, MOV, WebM or MKV, up to 2 GB each. Up to {UPLOADS_PER_DAY} uploads a day.
       </p>
     </div>
   );
@@ -141,7 +141,7 @@ function Counter({ value, max }: { value: number; max: number }) {
 
 /**
  * "Upload as a Snip" (feature 11, with the shorts flag on). Ticked by itself
- * for a vertical file of 60 seconds or less; greyed out with the reason for
+ * for a vertical file of 40 seconds or less; greyed out with the reason for
  * anything else. Unticking keeps a qualifying video out of Snips.
  */
 function ShortChoice() {
@@ -166,7 +166,7 @@ function ShortChoice() {
           <span className="block text-[13px] leading-[18px] text-text-2" data-short-choice-hint>
             {short.state === "checking"
               ? "Checking the file's size and length..."
-              : short.problem ?? "Vertical and 60 seconds or less, so it can show in Snips. Untick to keep it a regular video."}
+              : short.problem ?? "Vertical and 40 seconds or less, so it can show in Snips. Untick to keep it a regular video."}
           </span>
         </span>
       </label>

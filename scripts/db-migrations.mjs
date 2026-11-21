@@ -20,9 +20,10 @@
 
 import { spawnSync } from "node:child_process";
 import { readFileSync, readdirSync } from "node:fs";
-import { join, resolve } from "node:path";
+import { dirname, join, resolve } from "node:path";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
-const dir = resolve(new URL("../supabase/migrations", import.meta.url).pathname);
+const dir = resolve(dirname(fileURLToPath(import.meta.url)), "../supabase/migrations");
 
 /** The migration files in run order: 000_x.sql, 001_y.sql, ... */
 export function migrationFiles(folder = dir) {
@@ -65,7 +66,7 @@ function main(argv) {
     console.error(`done: ${files.length} migrations applied`);
     return 0;
   }
-  const out = [`-- sloptube: every migration in supabase/migrations, in order (${files.length} files).`, ""];
+  const out = [`-- vortexvids: every migration in supabase/migrations, in order (${files.length} files).`, ""];
   for (const f of files) {
     out.push(`-- ===== ${f} =====`, readFileSync(join(dir, f), "utf8").trimEnd(), "");
   }
@@ -73,4 +74,6 @@ function main(argv) {
   return 0;
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) process.exitCode = main(process.argv.slice(2));
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  process.exitCode = main(process.argv.slice(2));
+}

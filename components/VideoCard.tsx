@@ -55,16 +55,18 @@ export function VideoCard({
         <Link href={channelHref} className="shrink-0" aria-label={video.channel.name}>
           <Avatar name={video.channel.name} url={video.channel.avatarUrl} size={36} />
         </Link>
-        <div className="min-w-0 pr-6">
-          <Heading className="line-clamp-2 text-[14px] font-medium leading-5 text-text" title={video.title}>
+        <div className="min-w-0">
+          <Heading className="line-clamp-2 text-[14px] font-medium leading-5 text-text sm:text-[16px] sm:leading-[22px]" title={video.title}>
             <Link href={href}>{video.title}</Link>
+            {rank !== undefined && <span className="sr-only"> (number {rank} in trending)</span>}
           </Heading>
-          <p className="mt-1 text-[13px] leading-[18px] text-text-2 sm:mt-1.5">
+          <p className="mt-1 text-[13px] leading-[18px] text-text-2 sm:mt-1.5 sm:text-[14px] sm:leading-5">
             <Link href={channelHref} className="hover:text-text sm:block sm:truncate">
               {video.channel.name}
             </Link>
             <span className="sm:hidden"> · </span>
             {viewsLabel(video.views)} · {timeAgo(video.publishedAt, now)}
+            {video.durationS !== null && <span className="sr-only"> · {formatTime(video.durationS)} long</span>}
           </p>
         </div>
       </div>
@@ -76,10 +78,10 @@ export function VideoCard({
 export function VideoCardSkeleton({ className = "" }: { className?: string }) {
   return (
     <div aria-hidden className={`min-w-0 ${className}`} data-card-skeleton>
-      <div className="aspect-video bg-skeleton" />
+      <div className="aspect-video rounded-lg bg-skeleton" />
       <div className="mt-3 flex gap-3 px-3 sm:px-0">
         <div className="h-9 w-9 shrink-0 rounded-full bg-skeleton" />
-        <div className="flex-1 pr-6">
+        <div className="flex-1">
           <div className="h-4 w-[90%] bg-skeleton" />
           <div className="mt-2 h-4 w-[60%] bg-skeleton" />
         </div>

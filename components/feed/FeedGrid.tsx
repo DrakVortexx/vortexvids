@@ -14,6 +14,16 @@ import { bucketSections } from "@/lib/subscriptions/sections";
 /** Thumbnails in the first row load right away; the rest wait until they come near the screen. */
 const EAGER = 4;
 
+function Retry({ onClick }: { onClick: () => void }) {
+  return (
+    <div className="py-6 text-center">
+      <button type="button" onClick={onClick} className="btn-blue !normal-case rounded">
+        Couldn&apos;t load more. Retry
+      </button>
+    </div>
+  );
+}
+
 /**
  * The video grid with infinite scroll. The first page comes from the server
  * with the page; when the end of the grid gets near, the next page is read
@@ -123,6 +133,7 @@ export function FeedGrid({
           {loading && [0, 1, 2, 3].map((i) => <ShortCardSkeleton key={i} />)}
         </div>
         {next && <div ref={sentinel} aria-hidden className="h-px" data-feed-more />}
+        {failed && <Retry onClick={() => void loadMore()} />}
       </>
     );
   }
@@ -145,13 +156,7 @@ export function FeedGrid({
           </div>
         </div>
         {next && <div ref={sentinel} aria-hidden className="h-px" data-feed-more />}
-        {failed && (
-          <div className="py-6 text-center">
-            <button type="button" onClick={() => void loadMore()} className="text-[14px] font-medium uppercase text-link">
-              Couldn&apos;t load more. Retry
-            </button>
-          </div>
-        )}
+        {failed && <Retry onClick={() => void loadMore()} />}
       </>
     );
   }

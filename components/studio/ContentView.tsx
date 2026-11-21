@@ -475,7 +475,7 @@ export function ContentView({
                                 <AnalyticsIcon className="h-5 w-5" />
                               </IconLink>
                             )}
-                            <IconLink href={watchHref} label="View on sloptube">
+                            <IconLink href={watchHref} label="View on site">
                               <PlayIcon className="h-5 w-5" />
                             </IconLink>
                             <IconButton onClick={() => setConfirm([v.id])} label="Delete" disabled={busy}>

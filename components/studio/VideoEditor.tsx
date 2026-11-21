@@ -378,7 +378,7 @@ export function VideoEditor({
           )}
 
           {shortsOn && (
-            <Box title="Snips" hint="Vertical videos of 60 seconds or less show up in Snips.">
+            <Box title="Snips" hint="Vertical videos of 40 seconds or less show up in Snips.">
               {canBeShort ? (
                 <label className="flex cursor-pointer items-center gap-3 text-[14px] text-text">
                   <input
@@ -392,7 +392,7 @@ export function VideoEditor({
                   Show this video as a Snip
                 </label>
               ) : (
-                <p className="text-[14px] text-text-2">This video is not vertical and 60 seconds or less, so it stays a regular video.</p>
+                <p className="text-[14px] text-text-2">This video is not vertical and 40 seconds or less, so it stays a regular video.</p>
               )}
             </Box>
           )}

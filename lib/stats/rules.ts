@@ -103,11 +103,11 @@ export type Source = (typeof SOURCES)[number];
 
 export const SOURCE_LABELS: Record<Source, string> = {
   home: "Browse features",
-  search: "sloptube search",
+  search: "vortexvids search",
   subscriptions: "Subscriptions",
   channel: "Channel pages",
   shorts: "Snips feed",
-  other: "Other sloptube features",
+  other: "Other vortexvids features",
   direct: "Direct or unknown",
   external: "External",
 };

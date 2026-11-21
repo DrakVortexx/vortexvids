@@ -1,31 +1,36 @@
-import { VideoCardSkeleton, videoGridClass } from "./VideoCard";
+import Link from "next/link";
+import { LogoMark } from "./icons";
 
 /**
- * Shown on pages that have no videos yet. A short notice above a grid of grey
- * placeholder cards, so the layout already reads like the finished site.
+ * A real empty state: one clear message and one next step. Grey card grids are
+ * for loading only, so an empty or unavailable feature never looks half loaded.
  */
 export function EmptyState({
-  title = "Nothing here yet. Upload the first video.",
+  title = "Nothing here yet",
   hint = "Check back soon.",
-  cards = 8,
+  action,
 }: {
   title?: string;
   hint?: string;
-  cards?: number;
+  action?: { href: string; label: string };
 }) {
   return (
-    <div className="mx-auto max-w-[2200px] px-4 py-6 sm:px-6">
-      <div className="mb-6 border-b border-divider pb-6">
-        <h1 className="text-[20px] font-normal leading-7 text-text">{title}</h1>
-        <p className="mt-1 text-[14px] text-text-2">{hint}</p>
-      </div>
-      {cards > 0 && (
-        <div className={`${videoGridClass} opacity-70`}>
-          {Array.from({ length: cards }, (_, i) => (
-            <VideoCardSkeleton key={i} />
-          ))}
+    <div className="mx-auto flex max-w-[2200px] justify-center px-4 py-12 sm:px-6 sm:py-20" data-empty-state>
+      <div className="w-full max-w-md rounded-2xl border border-divider bg-surface px-6 py-10 text-center shadow-[0_8px_32px_rgba(124,58,237,0.08)] sm:px-10">
+        <div className="mx-auto mb-5 grid h-14 w-14 place-items-center rounded-full bg-hover">
+          <LogoMark className="h-8 w-8" />
         </div>
-      )}
+        <h1 className="text-[20px] font-medium leading-7 text-text">{title}</h1>
+        <p className="mx-auto mt-2 max-w-sm text-[14px] leading-6 text-text-2">{hint}</p>
+        {action && (
+          <Link
+            href={action.href}
+            className="btn-blue mt-6 normal-case"
+          >
+            {action.label}
+          </Link>
+        )}
+      </div>
     </div>
   );
 }

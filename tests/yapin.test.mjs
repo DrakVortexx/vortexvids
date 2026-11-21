@@ -262,7 +262,7 @@ test("Snips keep their own canonical link and get a portrait player", () => {
 
 test("the embed page is kept out of search engines and points at the watch page", () => {
   const m = embedMetadata(video, ORIGIN);
-  assert.equal(m.title, `${video.title} | sloptube`);
+  assert.equal(m.title, `${video.title} | vortexvids`);
   assert.equal(m.alternates.canonical, `${ORIGIN}/watch?v=${video.id}`);
   assert.deepEqual(m.robots, { index: false, follow: true });
 });

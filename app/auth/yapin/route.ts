@@ -15,7 +15,7 @@ import { openState, sameState, STATE_COOKIE, STATE_COOKIE_PATH } from "@/lib/yap
  * linked to that Yapin' id, makes a new account, or links the signed in
  * account (mode link). Yapin' shares no email address, so nothing is ever
  * matched by email; a new account gets a placeholder address (placeholderEmail
- * in lib/yapin/rules.ts) and goes to /welcome. Sessions are made with the
+ * in lib/yapin/rules.ts). Sessions are made with the
  * service role: a one time magic link token the server redeems at once,
  * never sent anywhere.
  */
@@ -98,9 +98,7 @@ export async function GET(request: NextRequest) {
       const { data: signedIn, error: otpError } = await session.auth.verifyOtp({ token_hash: tokenHash, type: "magiclink" });
       if (otpError || !signedIn.user) return back("error");
 
-      const { data: profile } = await session.from("profiles").select("onboarded").eq("id", signedIn.user.id).maybeSingle();
-      const target = profile?.onboarded ? saved.next : `/welcome?next=${encodeURIComponent(saved.next)}`;
-      return finish(new URL(target, origin));
+      return finish(new URL(saved.next, origin));
     }
   }
 }

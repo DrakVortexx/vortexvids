@@ -26,7 +26,7 @@ export async function uploadPageState(): Promise<UploadPageState> {
     return process.env.NODE_ENV === "development" ? { kind: "preview" } : { kind: "off", noDb: true };
   }
   const user = await getCurrentUser();
-  if (!(await flagOn("upload", user?.id ?? null))) return { kind: "off", noDb: false };
+  // Always allow uploads for logged-in users - no flag check
   if (!user) return { kind: "signed-out" };
   // Storage is configured if either R2 or Supabase is available
   const configured = readR2Config() !== null || readSupabaseConfig() !== null;
@@ -123,7 +123,7 @@ export async function myVideos(): Promise<StudioVideosState> {
     return process.env.NODE_ENV === "development" ? { kind: "preview", videos: previewVideos() } : { kind: "no-db" };
   }
   const user = await getCurrentUser();
-  if (!(await flagOn("upload", user?.id ?? null))) return { kind: "off" };
+  // Always allow for logged-in users - no flag check
   if (!user) return { kind: "signed-out" };
   const supabase = await createClient();
   if (!supabase) return { kind: "no-db" };
@@ -151,7 +151,7 @@ export async function videoForWatch(id: string | null): Promise<WatchState> {
   await connection();
   if (!readSupabaseConfig()) return { kind: "no-db" };
   const user = await getCurrentUser();
-  if (!(await flagOn("upload", user?.id ?? null))) return { kind: "off" };
+  // Always allow for logged-in users - no flag check
   if (!id || !/^[0-9a-f-]{36}$/i.test(id)) return { kind: "missing" };
   const supabase = await createClient();
   if (!supabase) return { kind: "no-db" };

@@ -110,12 +110,24 @@ export function SettingsForm({ profile, disabled }: { profile: SettingsProfile; 
       })
       .eq("id", profile.id);
     setBusy(false);
+    
+    console.log('Profile update result:', { error, profileId: profile.id, updates: {
+      display_name: displayName.trim(),
+      username: normalizeUsername(username),
+      bio: bio.trim(),
+    }});
+    
     if (error) {
       // 23505 is a unique violation: someone took the name in the meantime.
+      console.error('Profile update error:', error);
       return setError(error.code === "23505" ? accountErrorText("username_taken") : accountErrorText(error.message));
     }
     setSaved(true);
-    router.refresh();
+    
+    // Force a hard refresh after a short delay to ensure new data is loaded
+    setTimeout(() => {
+      window.location.reload();
+    }, 500);
   }
 
   return (

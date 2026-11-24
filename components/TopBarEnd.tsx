@@ -28,9 +28,10 @@ export async function TopBarEnd() {
     <>
       <SessionProvider config={config} user={sessionUser} flags={flags} />
       {!config && <DbStatus />}
-      {flags.upload && (
+      {/* Always show upload button for logged-in users */}
+      {sessionUser && (
         <Link
-          href={sessionUser ? "/upload" : "/login?next=/upload"}
+          href="/upload"
           prefetch={false}
           aria-label="Upload"
           title="Upload"
